@@ -1,38 +1,49 @@
+
 import streamlit as st
 import pandas as pd
 import requests
 
-url="https://linear-regression-project-3w1u.onrender.com/predict"
-st.title("welcome to my Linear Reression prediction model")
-st.subheader("below enter fill the value user")
+# FastAPI backend URL
+url = "https://linear-regression-project-3w1u.onrender.com/predict"
 
+st.title("Welcome to My Linear Regression Prediction Model")
+st.subheader("Please fill in the details below:")
 
-age=st.number_input("enter your age")
-service=st.number_input("enter your service[1 t0 3]")
-arrival_year=st.number_input("enter your arrival_year")
-arrival_month=st.number_input("enter your arrival_month")
-arrival_day=st.number_input("enter your arrival_day")
-departure_year=st.number_input("enter your departure_year")
-departure_month=st.number_input("enter your departure_month")
-departure_day=st.number_input("enter your departure_day")
+# Input fields
+age = st.number_input("Enter your age", min_value=0, step=1)
+service = st.number_input("Enter your service [1 to 3]", min_value=1, max_value=3, step=1)
+arrival_year = st.number_input("Enter your arrival year", min_value=2025, step=1)
+arrival_month = st.number_input("Enter your arrival month", min_value=1, max_value=12, step=1)
+arrival_day = st.number_input("Enter your arrival day", min_value=1, max_value=31, step=1)
+departure_year = st.number_input("Enter your departure year", min_value=2025, step=1)
+departure_month = st.number_input("Enter your departure month", min_value=1, max_value=12, step=1)
+departure_day = st.number_input("Enter your departure day", min_value=1, max_value=31, step=1)
 
-if st.button("pridict satification score"):
-    if age and service and arrival_year:
-        user_input={
-            "age":age,
-     "service":service,
-     "arrival_year":arrival_year,
-     "arrival_month":arrival_month,
-     "arrival_day":arrival_day,
-     "departure_year":departure_year,
-     "departure_month":departure_month,
-     "departure_day":departure_day }
-        
-    st.dataframe(user_input)
-    responce=requests.post(url,json=user_input)
-    if responce.status_code==200:
-        responce.json()
-        result=st.json(responce.json())
-        st.write("my predict satisfaction",result)
+# Prediction button
+if st.button("Predict Satisfaction Score"):
+    # Create a JSON input payload
+    user_input = {
+        "age": age,
+        "service": service,
+        "arrival_year": arrival_year,
+        "arrival_month": arrival_month,
+        "arrival_day": arrival_day,
+        "departure_year": departure_year,
+        "departure_month": departure_month,
+        "departure_day": departure_day
+    }
 
+    try:
+        # Send POST request to FastAPI backend
+        response = requests.post(url, json=user_input)
+
+        if response.status_code == 200:
+            result = response.json()
+            st.success("✅ Prediction Successful!")
+            st.json(result)
+        else:
+            st.error(f"❌ Error: {response.status_code} - {response.text}")
+
+    except requests.exceptions.RequestException as e:
+        st.error(f"🚫 Could not connect to the API: {e}")
 
