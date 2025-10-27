@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import requests
 
-url="http://127.0.0.1:8000/predict"
+url="https://linear-regression-project-3w1u.onrender.com/predict"
 st.title("welcome to my Linear Reression prediction model")
 st.subheader("below enter fill the value user")
 
