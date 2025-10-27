@@ -4,7 +4,7 @@ import pandas as pd
 import requests
 
 # FastAPI backend URL
-url = "https://linear-regression-project-3w1u.onrender.com/predict"
+url ="https://linear-regression-project-3w1u.onrender.com/predict"
 
 st.title("Welcome to My Linear Regression Prediction Model")
 st.subheader("Please fill in the details below:")
